@@ -1,1 +1,81 @@
-<p>brand-registro.component works!</p>
+<h2>Registro de Marcas</h2>
+<div [formGroup]="brandForm">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="nombre"
+          id="nombre"
+          placeholder=""
+          [ngClass]="{
+            'is-invalid':
+              fc['nombre'].invalid &&
+              (fc['nombre'].touched || submitted)
+          }"
+        />
+        @if (fc['nombre'].hasError('required')) {
+        <div class="invalid-feedback">El nombre es requerido.</div>
+        } @if (fc['nombre'].hasError('minlength')) {
+        <div class="invalid-feedback">
+          El nombre debe tener mínimo
+          {{ fc['nombre'].errors?.['minlength']?.requiredLength }}
+          caracteres.
+        </div>
+        } @if (fc['nombre'].hasError('maxlength')) {
+        <div class="invalid-feedback">
+          El nombre debe tener como máximo
+          {{ fc['nombre'].errors?.['maxlength']?.requiredLength }}
+          caracteres.
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="mb-3">
+        <label for="pais" class="form-label">Pais</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="pais"
+          id="pais"
+          placeholder=""
+          [ngClass]="{
+            'is-invalid':
+              fc['pais'].invalid &&
+              (fc['pais'].touched || submitted)
+          }"
+        />
+         @if (fc['pais'].hasError('required')) {
+        <div class="invalid-feedback">El pais es requerido.</div>
+        } @if (fc['pais'].hasError('minlength')) {
+        <div class="invalid-feedback">
+          El pais debe tener mínimo
+          {{ fc['pais'].errors?.['minlength']?.requiredLength }}
+          caracteres.
+        </div>
+        } @if (fc['pais'].hasError('maxlength')) {
+        <div class="invalid-feedback">
+          El pais debe tener como máximo
+          {{ fc['pais'].errors?.['maxlength']?.requiredLength }}
+          caracteres.
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-8">
+      <button type="button" class="btn btn-primary me-2" (click)="save()">
+        Grabar
+      </button>
+      <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
