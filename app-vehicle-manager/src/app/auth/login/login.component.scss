@@ -1,0 +1,100 @@
+.login {
+    background: rgb(51, 68, 110);
+    background: radial-gradient(circle, rgba(51, 68, 110, 1) 0%, rgba(34, 21, 25, 1) 100%);
+    display: grid;
+    gap: 1rem;
+    min-height: 100vh;
+    padding: 1rem;
+    place-items: center;
+    transition: .3s ease all;
+
+    &__container {
+        max-width: 850px;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 15px 3px 15px rgba(0, 0, 0, 0.25);
+        padding: 1rem; // Añade un padding interno
+    }
+
+    &__image {
+        height: 560px;
+        overflow: hidden;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @media (width < 768px) {
+            height: 460px;
+        }
+
+        @media (width < 576px) {
+            height: 120px;
+        }
+    }
+
+    &__form-container {
+        padding: 0 1rem 0;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: nowrap;
+        height: 100%;
+
+        @media (width < 576px) {
+            padding: 1.5rem 0 2.5rem;
+        }
+
+        form {
+            max-width: 240px;
+            width: 100%;
+
+            @media (width < 576px) {
+                max-width: 95%;
+            }
+        }
+    }
+
+    &__title {
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+    }
+
+    &__group_input {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        svg {
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            right: 0;
+            color: #ccc;
+            margin-right: 15px;
+        }
+    }
+
+    .form-control {
+        border-width: 2px;
+        border-radius: 26px;
+        padding: .475rem 1.25rem;
+        padding-right: 30px;
+
+        &::placeholder {
+            opacity: .75;
+            font-size: 14px;
+        }
+    }
+
+    .btn {
+        border-radius: 26px;
+        padding-top: .475rem;
+        padding-bottom: .475rem;
+    }
+}
