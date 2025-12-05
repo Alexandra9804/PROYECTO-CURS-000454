@@ -13,80 +13,83 @@ import { BrandModel } from '../../model/brand.model';
   styleUrl: './brand-registro.component.scss',
 })
 export class BrandRegistroComponent implements OnInit {
-private readonly brandService = inject(BrandService);
+  private readonly brandService = inject(BrandService);
 
-private readonly formBuilder = inject(FormBuilder);
+  private readonly formBuilder = inject(FormBuilder);
 
-private readonly router = inject(Router);
+  private readonly router = inject(Router);
 
-private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
-private readonly toastr = inject(ToastrService);
+  private readonly toastr = inject(ToastrService);
 
-public brands: BrandModel[] = [];
+  public brands: BrandModel[] = [];
 
-public brandForm!: FormGroup;
+  public brandForm!: FormGroup;
 
-public submitted: boolean = false;
+  public submitted: boolean = false;
 
-private id?: string;
+  private idMarca?: string;
 
-ngOnInit(): void {
-  
-}
+  ngOnInit(): void {
+    this.createForm();
+    this.getParameter(this.activatedRoute);
+  }
 
-save() {
+  save() {
     this.submitted = true;
     if (this.brandForm.invalid) {
       return;
     }
 
-    const brand:BrandModel = {
+    const brand: BrandModel = {
       nombre: this.fc['nombre'].value,
-      pais: this.fc['pais'].value,
+      paisOrigen: this.fc['paisOrigen'].value,
     };
 
-     if (this.id) {
-      this.brandService.update(this.id, brand).subscribe({
+    if (this.idMarca) {
+      this.brandService.update(this.idMarca, brand).subscribe({
         next: (res) => {
           console.log(res);
-           this.toastr.success('Aviso','La marca fue actualizada con éxito')
+          this.toastr.success('Aviso', 'La marca fue actualizada con éxito');
+          
         },
-        error:(err)=> {
+        error: (err) => {
           console.error(err);
-          this.toastr.error('Error','Error al registrar la marca')
+          this.toastr.error('Error', 'Error al registrar la marca');
         },
       });
     } else {
       this.brandService.save(brand).subscribe({
         next: (res) => {
           console.log(res);
-          this.toastr.success('Aviso','La marca fue registrado con éxito')
+          this.toastr.success('Aviso', 'La marca fue registrado con éxito');
         },
-        error:(err)=> {
+        error: (err) => {
           console.error(err);
-          this.toastr.error('Error','Error al registrar la marca')
+          this.toastr.error('Error', 'Error al registrar la marca');
         },
       });
     }
+    this.router.navigate(['home/brands/listado']);
+  
   }
 
   cancelar() {
     this.router.navigate(['home/brands/listado']);
   }
 
-
   getParameter(activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.subscribe({
       next: (params) => {
-        if (params['id']) {          
-          this.id = params['id'];
+        if (params['id']) {
+          this.idMarca = params['id'];
 
-          this.brandService.findById(this.id).subscribe({
+          this.brandService.findById(this.idMarca).subscribe({
             next: (res) => {
               console.log(res);
               this.fc['nombre'].setValue(res.nombre);
-              this.fc['pais'].setValue(res.pais);
+              this.fc['paisOrigen'].setValue(res.paisOrigen);
             },
             error(err) {
               console.error(err);
@@ -97,27 +100,14 @@ save() {
     });
   }
 
-   createForm() {
-    this.brandForm = this.formBuilder.group({      
-      nombre: [
-        '',
-        [Validators.required, Validators.minLength(2), Validators.maxLength(50)],
-      ],      
-      pais: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(60),
-        ],
-      ],
+  createForm() {
+    this.brandForm = this.formBuilder.group({
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      paisOrigen: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]],
     });
   }
-
-  
 
   get fc(): { [key: string]: AbstractControl } {
     return this.brandForm.controls;
   }
-
 }

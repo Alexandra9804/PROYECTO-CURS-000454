@@ -8,8 +8,8 @@ export const HOME_ROUTES: Routes = [
       {
         path: 'brands',
         loadChildren: () =>
-          import('../../brands/router/brands.router').then((m) => m.CARGOS_ROUTES),
-      }
+          import('../../brands/router/brands.router').then((m) => m.BRANDS_ROUTES),
+      },
     ],
   },
 ];

@@ -12,10 +12,10 @@ export class BrandHomeComponent {
   private readonly router=inject(Router);
 
   irListado(){
-    this.router.navigate(["brands/listado"])
+    this.router.navigate(['home/brands/listado']);
   }
 
   irRegistro(){
-    this.router.navigate(["brands/registro"])
+    this.router.navigate(["home/brands/registro"])
   }
 }

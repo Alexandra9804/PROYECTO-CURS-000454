@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { BrandService } from '../../services/brand.service';
 import { Router } from '@angular/router';
 import { BrandModel } from '../../model/brand.model';
@@ -7,18 +7,19 @@ import Swal from 'sweetalert2';
 
 
 @Component({
-  selector: 'app-brand-listado.component',  
+  selector: 'app-brand-listado.component',
   imports: [ReactiveFormsModule],
   templateUrl: './brand-listado.component.html',
   styleUrl: './brand-listado.component.scss',
 })
-export class BrandListadoComponent implements OnInit{
-
+export class BrandListadoComponent implements OnInit {
   private readonly brandService = inject(BrandService);
 
   private readonly router = inject(Router);
 
   private readonly formBuilder = inject(FormBuilder);
+
+  private readonly cdr = inject(ChangeDetectorRef);
 
   public brands: BrandModel[] = [];
 
@@ -29,41 +30,40 @@ export class BrandListadoComponent implements OnInit{
     this.list();
   }
 
-   buscar() {
-    const nombre = this.brandListadoForm.controls['nombre'].value
+  buscar() {
+    const nombre = this.brandListadoForm.controls['nombre'].value;
     this.brandService.buscar(nombre).subscribe({
-      next: (res) => {        
-        this.brands = res;        
-        if(this.brands){          
-          this.brands=this.brands.filter(br=> {
-              return br.nombre.includes(nombre);
-            });           
+      next: (res) => {
+        this.brands = res;
+        if (this.brands) {
+          this.brands = this.brands.filter((br) => {
+            return br.nombre.includes(nombre);
+          });
         }
       },
       error(err) {
         console.error(err);
       },
     });
-
   }
 
-  list(){
+  list() {
     this.brandService.list().subscribe({
       next: (res) => {
         this.brands = res;
+        this.cdr.detectChanges();
       },
-      error(err){
+      error(err) {
         console.error(err);
-      }
+      },
     });
-
   }
 
   edit(brand: BrandModel) {
-    this.router.navigate(['home/brands/registro', brand.id])
+    this.router.navigate(['home/brands/registro', brand.idMarca]);
   }
 
-   delete(brand: BrandModel) {
+  delete(brand: BrandModel) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -83,13 +83,14 @@ export class BrandListadoComponent implements OnInit{
       })
       .then((result) => {
         if (result.isConfirmed) {
-          this.brandService.delete(brand.id).subscribe({
-            next: (res) => {              
+          this.brandService.delete(brand.idMarca).subscribe({
+            next: (res) => {
               swalWithBootstrapButtons.fire({
                 title: 'Eliminado!',
                 text: 'La marca ' + brand.nombre + ' fue eliminado',
                 icon: 'success',
               });
+              this.list();
             },
             error(err) {
               console.error(err);
@@ -104,13 +105,13 @@ export class BrandListadoComponent implements OnInit{
         }
       });
   }
-  nuevo(){
-    this.router.navigate(['home/brands/registro'])
+  nuevo() {
+    this.router.navigate(['home/brands/registro']);
   }
 
   createListadoForm() {
     this.brandListadoForm = this.formBuilder.group({
-      nombre: ['']
+      nombre: [''],
     });
   }
 }

@@ -1,5 +1,5 @@
-export interface BrandModel{
-    id?:string
-    nombre:string
-    pais:string
+export interface BrandModel {
+  idMarca?: string;
+  nombre: string;
+  paisOrigen: string;
 }
