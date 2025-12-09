@@ -7,10 +7,11 @@ import Swal from 'sweetalert2';
 import { RefreshService } from '../../../../../shared/services/refresh.service';
 import { PageResponse } from '../../../../../shared/models/page-response.model';
 import { CommonModule } from '@angular/common';
+import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-brand-listado.component',
-  imports: [ReactiveFormsModule, CommonModule, ],
+  imports: [ReactiveFormsModule, CommonModule, ModalModule],
   templateUrl: './brand-listado.component.html',
   styleUrl: './brand-listado.component.scss',
 })
@@ -22,6 +23,12 @@ export class BrandListadoComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
 
   private readonly refreshService = inject(RefreshService);
+
+  private readonly modalService = inject(BsModalService);
+
+  public modalRef?: BsModalRef;
+
+  public brandSelected!: BrandModel;
 
   public brands: BrandModel[] = [];
 
@@ -35,8 +42,6 @@ export class BrandListadoComponent implements OnInit {
 
   public brandListadoForm!: FormGroup;
 
-  public selectedBrand: any = null;
-
   ngOnInit(): void {
     this.createListadoForm();
 
@@ -49,7 +54,7 @@ export class BrandListadoComponent implements OnInit {
 
   buscar() {
     const nombre = this.brandListadoForm.controls['nombre'].value ?? '';
-    this.page = 0; 
+    this.page = 0;
 
     this.brandService.list(nombre, this.page, this.size).subscribe({
       next: (res: PageResponse<BrandModel>) => {
@@ -108,13 +113,15 @@ export class BrandListadoComponent implements OnInit {
                 this.page = this.page - 1;
               }
 
-              this.list();
-
-              swalWithBootstrapButtons.fire({
-                title: 'Eliminado!',
-                text: 'La marca ' + brand.nombre + ' fue eliminado',
-                icon: 'success',
-              });
+              swalWithBootstrapButtons
+                .fire({
+                  title: 'Eliminado!',
+                  text: 'La marca ' + brand.nombre + ' fue eliminado',
+                  icon: 'success',
+                })
+                .then(() => {
+                  this.list(); 
+                });
             },
             error: (err) => {
               console.error(err);
@@ -155,4 +162,8 @@ export class BrandListadoComponent implements OnInit {
     this.list();
   }
 
+  openModal(template: TemplateRef<void>, brand: BrandModel) {
+    this.brandSelected = brand;
+    this.modalRef = this.modalService.show(template);
+  }
 }
