@@ -6,10 +6,10 @@ import { RouterLink } from "@angular/router";
   selector: 'app-nav',
   imports: [RouterLink],
   templateUrl: './nav.component.html',
-  styleUrl: './nav.component.scss'
+  styleUrl: './nav.component.scss',
 })
 export class NavComponent {
-  constructor(private menuService: MenuService) { }
+  constructor(private menuService: MenuService) {}
   isShoMenu() {
     this.menuService.toggleMenu();
   }

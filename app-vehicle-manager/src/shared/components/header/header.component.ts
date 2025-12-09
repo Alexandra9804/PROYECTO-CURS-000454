@@ -5,11 +5,10 @@ import { MenuService } from '../../services/menu.service';
   selector: 'app-header',
   imports: [],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-
-  private readonly menuService=inject(MenuService)
+  private readonly menuService = inject(MenuService);
 
   isShoMenu() {
     this.menuService.toggleMenu();

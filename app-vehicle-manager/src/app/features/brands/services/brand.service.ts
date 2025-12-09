@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BrandModel } from '../model/brand.model';
+import { PageResponse } from '../../../../shared/models/page-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,9 +12,15 @@ export class BrandService {
   url = `${environment.API_BASE}/api/v1/marcas`;
 
   private readonly httpClient = inject(HttpClient);
-
+  /*
   list(): Observable<BrandModel[]> {
     return this.httpClient.get<BrandModel[]>(this.url);
+  }*/
+
+  list(nombre: string, page: number, size: number): Observable<PageResponse<BrandModel>> {
+    let params = new HttpParams().set('nombre', nombre).set('page', page).set('size', size);
+
+    return this.httpClient.get<PageResponse<BrandModel>>(`${this.url}/search`, { params });
   }
 
   buscar(nombre: string): Observable<BrandModel[]> {

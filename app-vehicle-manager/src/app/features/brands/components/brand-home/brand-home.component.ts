@@ -8,14 +8,13 @@ import { Router, RouterOutlet } from '@angular/router';
   styleUrl: './brand-home.component.scss',
 })
 export class BrandHomeComponent {
+  private readonly router = inject(Router);
 
-  private readonly router=inject(Router);
-
-  irListado(){
+  irListado() {
     this.router.navigate(['home/brands/listado']);
   }
 
-  irRegistro(){
-    this.router.navigate(["home/brands/registro"])
+  irRegistro() {
+    this.router.navigate(['home/brands/registro']);
   }
 }

@@ -1,14 +1,16 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { BrandService } from '../../services/brand.service';
 import { Router } from '@angular/router';
 import { BrandModel } from '../../model/brand.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-
+import { RefreshService } from '../../../../../shared/services/refresh.service';
+import { PageResponse } from '../../../../../shared/models/page-response.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-brand-listado.component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule, ],
   templateUrl: './brand-listado.component.html',
   styleUrl: './brand-listado.component.scss',
 })
@@ -19,43 +21,57 @@ export class BrandListadoComponent implements OnInit {
 
   private readonly formBuilder = inject(FormBuilder);
 
-  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly refreshService = inject(RefreshService);
 
   public brands: BrandModel[] = [];
 
+  public totalElements = 0;
+
+  public page = 0;
+
+  public size = 6;
+
+  public totalPages = 0;
+
   public brandListadoForm!: FormGroup;
+
+  public selectedBrand: any = null;
 
   ngOnInit(): void {
     this.createListadoForm();
+
+    this.refreshService.refresh$.subscribe(() => {
+      this.list();
+    });
+
     this.list();
   }
 
   buscar() {
-    const nombre = this.brandListadoForm.controls['nombre'].value;
-    this.brandService.buscar(nombre).subscribe({
-      next: (res) => {
-        this.brands = res;
-        if (this.brands) {
-          this.brands = this.brands.filter((br) => {
-            return br.nombre.includes(nombre);
-          });
-        }
+    const nombre = this.brandListadoForm.controls['nombre'].value ?? '';
+    this.page = 0; 
+
+    this.brandService.list(nombre, this.page, this.size).subscribe({
+      next: (res: PageResponse<BrandModel>) => {
+        this.brands = res.content;
+        this.totalElements = res.totalElements;
+        this.totalPages = res.totalPages;
       },
-      error(err) {
-        console.error(err);
-      },
+      error: (err) => console.error(err),
     });
   }
 
   list() {
-    this.brandService.list().subscribe({
+    const nombre = this.brandListadoForm.controls['nombre'].value ?? '';
+
+    this.brandService.list(nombre, this.page, this.size).subscribe({
       next: (res) => {
-        this.brands = res;
-        this.cdr.detectChanges();
+        this.brands = res.content;
+        this.totalElements = res.totalElements;
+        this.totalPages = res.totalPages;
+        this.page = res.number;
       },
-      error(err) {
-        console.error(err);
-      },
+      error: (err) => console.error(err),
     });
   }
 
@@ -71,6 +87,7 @@ export class BrandListadoComponent implements OnInit {
       },
       buttonsStyling: false,
     });
+
     swalWithBootstrapButtons
       .fire({
         title: 'Confirmar eliminación',
@@ -84,15 +101,22 @@ export class BrandListadoComponent implements OnInit {
       .then((result) => {
         if (result.isConfirmed) {
           this.brandService.delete(brand.idMarca).subscribe({
-            next: (res) => {
+            next: () => {
+              const isLastItemOnPage = this.brands.length === 1;
+
+              if (isLastItemOnPage && this.page > 0) {
+                this.page = this.page - 1;
+              }
+
+              this.list();
+
               swalWithBootstrapButtons.fire({
                 title: 'Eliminado!',
                 text: 'La marca ' + brand.nombre + ' fue eliminado',
                 icon: 'success',
               });
-              this.list();
             },
-            error(err) {
+            error: (err) => {
               console.error(err);
             },
           });
@@ -105,6 +129,7 @@ export class BrandListadoComponent implements OnInit {
         }
       });
   }
+
   nuevo() {
     this.router.navigate(['home/brands/registro']);
   }
@@ -114,4 +139,20 @@ export class BrandListadoComponent implements OnInit {
       nombre: [''],
     });
   }
+
+  changePage(page: number) {
+    if (page < 0 || page >= this.totalPages) return;
+
+    this.page = page;
+    this.list();
+  }
+
+  limpiar() {
+    this.brandListadoForm.reset({
+      nombre: '',
+    });
+
+    this.list();
+  }
+
 }

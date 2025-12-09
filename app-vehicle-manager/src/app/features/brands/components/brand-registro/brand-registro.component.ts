@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BrandModel } from '../../model/brand.model';
+import { RefreshService } from '../../../../../shared/services/refresh.service';
 
 @Component({
   selector: 'app-brand-registro.component',
@@ -23,6 +24,8 @@ export class BrandRegistroComponent implements OnInit {
 
   private readonly toastr = inject(ToastrService);
 
+  private readonly refreshService = inject(RefreshService);
+
   public brands: BrandModel[] = [];
 
   public brandForm!: FormGroup;
@@ -33,7 +36,7 @@ export class BrandRegistroComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
-    this.getParameter(this.activatedRoute);
+    this.getParameter();
   }
 
   save() {
@@ -45,14 +48,16 @@ export class BrandRegistroComponent implements OnInit {
     const brand: BrandModel = {
       nombre: this.fc['nombre'].value,
       paisOrigen: this.fc['paisOrigen'].value,
+      descripcion: this.fc['descripcion'].value,
+      anioFundacion: this.fc['anioFundacion'].value,
     };
 
     if (this.idMarca) {
       this.brandService.update(this.idMarca, brand).subscribe({
         next: (res) => {
+          console.log(brand);
           console.log(res);
           this.toastr.success('Aviso', 'La marca fue actualizada con éxito');
-          
         },
         error: (err) => {
           console.error(err);
@@ -71,15 +76,16 @@ export class BrandRegistroComponent implements OnInit {
         },
       });
     }
-    this.router.navigate(['home/brands/listado']);
-  
+    this.router.navigate(['home/brands/listado']).then(() => {
+      this.refreshService.emitRefresh();
+    });
   }
 
   cancelar() {
     this.router.navigate(['home/brands/listado']);
   }
 
-  getParameter(activatedRoute: ActivatedRoute) {
+  getParameter() {
     this.activatedRoute.params.subscribe({
       next: (params) => {
         if (params['id']) {
@@ -90,6 +96,8 @@ export class BrandRegistroComponent implements OnInit {
               console.log(res);
               this.fc['nombre'].setValue(res.nombre);
               this.fc['paisOrigen'].setValue(res.paisOrigen);
+              this.fc['descripcion'].setValue(res.descripcion);
+              this.fc['anioFundacion'].setValue(res.anioFundacion);
             },
             error(err) {
               console.error(err);
@@ -104,6 +112,11 @@ export class BrandRegistroComponent implements OnInit {
     this.brandForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       paisOrigen: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]],
+      descripcion: ['', [Validators.maxLength(150)]],
+      anioFundacion: [
+        '',
+        [Validators.pattern(/^[0-9]{4}$/), Validators.min(1800), Validators.max(2100)],
+      ],
     });
   }
 

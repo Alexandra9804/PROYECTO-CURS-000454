@@ -1,6 +1,9 @@
 <h2>Registro de Marcas</h2>
 <div [formGroup]="brandForm">
+
   <div class="row">
+
+    <!-- Nombre -->
     <div class="col-sm-4">
       <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
@@ -9,73 +12,109 @@
           class="form-control"
           formControlName="nombre"
           id="nombre"
-          placeholder=""
           [ngClass]="{
-            'is-invalid':
-              fc['nombre'].invalid &&
-              (fc['nombre'].touched || submitted)
+            'is-invalid': fc['nombre'].invalid && (fc['nombre'].touched || submitted)
           }"
         />
+
         @if (fc['nombre'].hasError('required')) {
-        <div class="invalid-feedback">El nombre es requerido.</div>
-        } @if (fc['nombre'].hasError('minlength')) {
+        <div class="invalid-feedback">El nombre es requerido.</div> }
+        @if (fc['nombre'].hasError('minlength')) {
         <div class="invalid-feedback">
-          El nombre debe tener mínimo
-          {{ fc['nombre'].errors?.['minlength']?.requiredLength }}
-          caracteres.
-        </div>
-        } @if (fc['nombre'].hasError('maxlength')) {
+          El nombre debe tener mínimo {{ fc['nombre'].errors?.['minlength']?.requiredLength }} caracteres.
+        </div> }
+        @if (fc['nombre'].hasError('maxlength')) {
         <div class="invalid-feedback">
-          El nombre debe tener como máximo
-          {{ fc['nombre'].errors?.['maxlength']?.requiredLength }}
-          caracteres.
-        </div>
-        }
+          El nombre debe tener como máximo {{ fc['nombre'].errors?.['maxlength']?.requiredLength }} caracteres.
+        </div> }
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6">
+
+    <!-- País -->
+    <div class="col-sm-4">
       <div class="mb-3">
-        <label for="paisOrigen" class="form-label">Pais</label>
+        <label for="paisOrigen" class="form-label">País</label>
         <input
           type="text"
           class="form-control"
           formControlName="paisOrigen"
           id="paisOrigen"
-          placeholder=""
           [ngClass]="{
-            'is-invalid':
-              fc['paisOrigen'].invalid &&
-              (fc['paisOrigen'].touched || submitted)
+            'is-invalid': fc['paisOrigen'].invalid && (fc['paisOrigen'].touched || submitted)
           }"
         />
-         @if (fc['paisOrigen'].hasError('required')) {
-        <div class="invalid-feedback">El pais es requerido.</div>
-        } @if (fc['paisOrigen'].hasError('minlength')) {
+
+        @if (fc['paisOrigen'].hasError('required')) {
+        <div class="invalid-feedback">El país es requerido.</div> }
+        @if (fc['paisOrigen'].hasError('minlength')) {
         <div class="invalid-feedback">
-          El pais debe tener mínimo
-          {{ fc['pais'].errors?.['minlength']?.requiredLength }}
-          caracteres.
-        </div>
-        } @if (fc['paisOrigen'].hasError('maxlength')) {
+          El país debe tener mínimo {{ fc['paisOrigen'].errors?.['minlength']?.requiredLength }} caracteres.
+        </div> }
+        @if (fc['paisOrigen'].hasError('maxlength')) {
         <div class="invalid-feedback">
-          El pais debe tener como máximo
-          {{ fc['pais'].errors?.['maxlength']?.requiredLength }}
-          caracteres.
-        </div>
-        }
+          El país debe tener como máximo {{ fc['paisOrigen'].errors?.['maxlength']?.requiredLength }} caracteres.
+        </div> }
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Descripción -->
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea
+          class="form-control"
+          formControlName="descripcion"
+          id="descripcion"
+          rows="3"
+          [ngClass]="{
+            'is-invalid': fc['descripcion'].invalid && (fc['descripcion'].touched || submitted)
+          }"
+        ></textarea>
+
+        @if (fc['descripcion'].hasError('maxlength')) {
+        <div class="invalid-feedback">
+          La descripción debe tener como máximo {{ fc['descripcion'].errors?.['maxlength']?.requiredLength }} caracteres.
+        </div> }
       </div>
     </div>
   </div>
+
+  <!-- Año de Fundación -->
   <div class="row">
-    <div class="col-sm-8">
-      <button type="button" class="btn btn-primary me-2" (click)="save()">
-        Grabar
-      </button>
-      <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
-        Cancelar
-      </button>
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="anioFundacion" class="form-label">Año de Fundación</label>
+        <input
+          type="text"
+          id="anioFundacion"
+          class="form-control sin-flechas"
+          formControlName="anioFundacion"
+          maxlength="4"
+          placeholder="Ej. 1995"
+          [ngClass]="{
+            'is-invalid': fc['anioFundacion'].invalid && (fc['anioFundacion'].touched || submitted)
+          }"
+        />
+
+        @if (fc['anioFundacion'].hasError('min')) {
+        <div class="invalid-feedback">El año mínimo permitido es 1800.</div> }
+        @if (fc['anioFundacion'].hasError('max')) {
+        <div class="invalid-feedback">El año máximo permitido es 2100.</div> }
+        @if (fc['anioFundacion'].hasError('pattern')) {
+        <div class="invalid-feedback">Ingrese solo números válidos.</div> }
+      </div>
     </div>
   </div>
+
+  <!-- Botones -->
+  <div class="row">
+    <div class="col-sm-8">
+      <button type="button" class="btn btn-primary me-2" (click)="save()">Grabar</button>
+      <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+
 </div>
