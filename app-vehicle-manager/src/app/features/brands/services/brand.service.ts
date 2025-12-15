@@ -12,10 +12,10 @@ export class BrandService {
   url = `${environment.API_BASE}/api/v1/marcas`;
 
   private readonly httpClient = inject(HttpClient);
-  /*
-  list(): Observable<BrandModel[]> {
+  
+  listAll(): Observable<BrandModel[]> {
     return this.httpClient.get<BrandModel[]>(this.url);
-  }*/
+  }
 
   list(nombre: string, page: number, size: number): Observable<PageResponse<BrandModel>> {
     let params = new HttpParams().set('nombre', nombre).set('page', page).set('size', size);
