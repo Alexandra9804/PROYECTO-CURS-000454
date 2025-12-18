@@ -64,14 +64,15 @@
             <td class="col-acciones">
               <div class="d-flex justify-content-end gap-2">
                 <button type="button" class="btn btn-outline-info btn-sm">
-                  <i class="bi bi-folder2-open me-2"></i>Info</button>
+                  <i class="bi bi-folder2-open me-2"></i>Info
+                </button>
 
-                <button type="button" class="btn btn-outline-success btn-sm">
+                <button type="button" class="btn btn-outline-success btn-sm" (click)="edit(model)">
                   <i class="bi bi-pen me-1"></i> Modificar
                 </button>
 
-                <button type="button" class="btn btn-outline-danger btn-sm">
-                  <i class="bi bi-trash3 me-1"></i> Eliminar
+                <button type="button" class="btn btn-outline-danger me-2" (click)="delete(model)">
+                  <i class="bi bi-trash3 me-2"></i> Eliminar
                 </button>
               </div>
             </td>

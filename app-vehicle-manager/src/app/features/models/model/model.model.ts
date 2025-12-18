@@ -1,10 +1,10 @@
 export interface ModelModel {
-  idModelo: number;
-  nombre: string;
+  idModelo?: string;
+  nombre?: string;
   descripcion?: string;
-  anioLanzamiento?: number;
+  anioLanzamiento?: string;
   version?: string;
-  capacidadPasajeros?: number;
-  marcaId: number;
-  marcaNombre: string;
+  capacidadPasajeros?: string;
+  marcaId?: string;
+  marcaNombre?: string;
 }

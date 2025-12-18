@@ -12,6 +12,22 @@ export class ModelService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.API_BASE}/api/v1/modelos`;
 
+  save(model: ModelModel): Observable<ModelModel> {
+    return this.http.post<ModelModel>(this.baseUrl, model);
+  }
+
+  update(id?: string, model?: ModelModel): Observable<ModelModel> {
+    return this.http.put<ModelModel>(`${this.baseUrl}/${id}`, model);
+  }
+
+  findById(id?: string): Observable<ModelModel> {
+    return this.http.get<ModelModel>(`${this.baseUrl}/${id}`);
+  }
+
+  delete(id?: string): Observable<ModelModel> {
+    return this.http.delete<ModelModel>(`${this.baseUrl}/${id}`);
+  }
+
   list(
     nombre: string | null,
     idMarca: number | null,
