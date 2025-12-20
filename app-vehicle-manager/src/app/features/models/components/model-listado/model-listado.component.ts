@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { ModelService } from '../../services/model.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PageResponse } from '../../../../../shared/models/page-response.model';
@@ -8,6 +8,7 @@ import { BrandModel } from '../../../brands/model/brand.model';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-model-listado.component',
@@ -24,6 +25,8 @@ export class ModelListadoComponent implements OnInit {
 
   private readonly router = inject(Router);
 
+  private readonly modalService = inject(BsModalService);
+
   public modelListadoForm!: FormGroup;
 
   public page = 0;
@@ -33,6 +36,10 @@ export class ModelListadoComponent implements OnInit {
   public totalPages = 0;
 
   public totalElements = 0;
+
+  public modalRef?: BsModalRef;
+
+  public modelSelected!: ModelModel;
 
   public models: ModelModel[] = [];
 
@@ -111,56 +118,61 @@ export class ModelListadoComponent implements OnInit {
     this.router.navigate(['home/models/registro', model.idModelo]);
   }
 
-     delete(model: ModelModel) {
-       const swalWithBootstrapButtons = Swal.mixin({
-         customClass: {
-           confirmButton: 'btn btn-success',
-           cancelButton: 'btn btn-danger',
-         },
-         buttonsStyling: false,
-       });
-   
-       swalWithBootstrapButtons
-         .fire({
-           title: 'Confirmar eliminación',
-           text: 'El modelo ' + model.nombre + ' será eliminado',
-           icon: 'warning',
-           showCancelButton: true,
-           confirmButtonText: 'Eliminar',
-           cancelButtonText: 'Cancelar',
-           reverseButtons: true,
-         })
-         .then((result) => {
-           if (result.isConfirmed) {
-             this.modelService.delete(model.idModelo).subscribe({
-               next: () => {
-                 const isLastItemOnPage = this.brands.length === 1;
+  delete(model: ModelModel) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
+      },
+      buttonsStyling: false,
+    });
 
-                 if (isLastItemOnPage && this.page > 0) {
-                   this.page = this.page - 1;
-                 }
+    swalWithBootstrapButtons
+      .fire({
+        title: 'Confirmar eliminación',
+        text: 'El modelo ' + model.nombre + ' será eliminado',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.modelService.delete(model.idModelo).subscribe({
+            next: () => {
+              const isLastItemOnPage = this.brands.length === 1;
 
-                 swalWithBootstrapButtons
-                   .fire({
-                     title: 'Eliminado!',
-                     text: 'El modelo ' + model.nombre + ' fue eliminado',
-                     icon: 'success',
-                   })
-                   .then(() => {
-                     this.list();
-                   });
-               },
-               error: (err) => {
-                 console.error(err);
-               },
-             });
-           } else if (result.dismiss === Swal.DismissReason.cancel) {
-             swalWithBootstrapButtons.fire({
-               title: 'Cancelado',
-               text: 'El modelo ' + model.nombre + ' no fue eliminado',
-               icon: 'error',
-             });
-           }
-         });
-     }
+              if (isLastItemOnPage && this.page > 0) {
+                this.page = this.page - 1;
+              }
+
+              swalWithBootstrapButtons
+                .fire({
+                  title: 'Eliminado!',
+                  text: 'El modelo ' + model.nombre + ' fue eliminado',
+                  icon: 'success',
+                })
+                .then(() => {
+                  this.list();
+                });
+            },
+            error: (err) => {
+              console.error(err);
+            },
+          });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          swalWithBootstrapButtons.fire({
+            title: 'Cancelado',
+            text: 'El modelo ' + model.nombre + ' no fue eliminado',
+            icon: 'error',
+          });
+        }
+      });
+  }
+
+  openModal(template: TemplateRef<void>, model: ModelModel) {
+    this.modelSelected = model;
+    this.modalRef = this.modalService.show(template);
+  }
 }

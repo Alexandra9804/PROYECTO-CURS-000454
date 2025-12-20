@@ -63,7 +63,11 @@
 
             <td class="col-acciones">
               <div class="d-flex justify-content-end gap-2">
-                <button type="button" class="btn btn-outline-info btn-sm">
+                <button 
+                  type="button" 
+                  class="btn btn-outline-info btn-sm"
+                  (click)="openModal(template, model)"                  
+                >
                   <i class="bi bi-folder2-open me-2"></i>Info
                 </button>
 
@@ -106,3 +110,64 @@
     </div>
   </div>
 </div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title">Información del Modelo</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef?.hide()">
+    </button>
+  </div>
+
+  @if (modelSelected) {
+    <div class="modal-body">
+      <div class="card">
+        <div class="card-header">
+          {{ modelSelected.nombre }}
+        </div>
+
+        <div class="card-body">
+          <p>
+            <strong>ID:</strong>
+            {{ modelSelected.idModelo || 'No registrado' }}
+          </p>
+
+          <p>
+            <strong>Descripción:</strong>
+            {{ modelSelected.descripcion || 'Sin descripción' }}
+          </p>
+
+          <p>
+            <strong>Año de Lanzamiento:</strong>
+            {{ modelSelected.anioLanzamiento || 'No registrado' }}
+          </p>
+
+          <p>
+            <strong>Versión:</strong>
+            {{ modelSelected.version || 'No registrada' }}
+          </p>
+
+          <p>
+            <strong>Capacidad de Pasajeros:</strong>
+            {{ modelSelected.capacidadPasajeros || 'No registrada' }}
+          </p>
+
+          <p>
+            <strong>Marca:</strong>
+            {{ modelSelected.marcaNombre || 'No registrada' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="text-end mt-3">
+        <button class="btn btn-primary" (click)="modalRef?.hide()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  }
+</ng-template>
+

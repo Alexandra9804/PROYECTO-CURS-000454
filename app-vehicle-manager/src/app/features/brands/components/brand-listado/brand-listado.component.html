@@ -100,24 +100,40 @@
 <ng-template #template>
   <div class="modal-header">
     <h4 class="modal-title">Información de la Marca</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modalRef?.hide()"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef?.hide()">
+    </button>
   </div>
 
-  <div class="modal-body" *ngIf="brandSelected">
-    <div class="card">
-      <div class="card-header">
-        {{ brandSelected.nombre }}
-      </div>
-      <div class="card-body">
-        <p><strong>ID:</strong> {{ brandSelected.idMarca }}</p>
-        <p><strong>País:</strong> {{ brandSelected.paisOrigen }}</p>
-        <p><strong>Descripción:</strong> {{ brandSelected.descripcion || 'Sin descripción' }}</p>
-        <p><strong>Año de Fundación:</strong> {{ brandSelected.anioFundacion || 'No registrado' }}</p>
-      </div>
-    </div>
+  @if (brandSelected) {
+    <div class="modal-body">
+      <div class="card">
+        <div class="card-header">
+          {{ brandSelected.nombre }}
+        </div>
 
-    <div class="text-end mt-3">
-      <button class="btn btn-primary" (click)="modalRef?.hide()">Cerrar</button>
+        <div class="card-body">
+          <p><strong>ID:</strong> {{ brandSelected.idMarca }}</p>
+          <p><strong>País:</strong> {{ brandSelected.paisOrigen }}</p>
+          <p>
+            <strong>Descripción:</strong>
+            {{ brandSelected.descripcion || 'Sin descripción' }}
+          </p>
+          <p>
+            <strong>Año de Fundación:</strong>
+            {{ brandSelected.anioFundacion || 'No registrado' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="text-end mt-3">
+        <button class="btn btn-primary" (click)="modalRef?.hide()">
+          Cerrar
+        </button>
+      </div>
     </div>
-  </div>
+  }
 </ng-template>
