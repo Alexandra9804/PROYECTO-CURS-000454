@@ -1,0 +1,52 @@
+.pagination-container {
+    position: relative !important;
+    top: auto !important;
+    bottom: 0 !important;
+    margin-top: 20px;
+    display: block !important;
+}
+
+.pagination-container {
+
+    height: auto !important;
+}
+
+.table {
+    table-layout: fixed;
+}
+
+/* === Anchos de columnas (necesarios para table-layout: fixed) === */
+
+.col-id {
+    width: 4%;
+}
+
+.col-vin {
+    width: 20%;
+}
+
+.col-anio {
+    width: 7%;
+}
+
+.col-marca {
+    width: 10%;
+}
+
+.col-modelo {
+    width: 12%;
+}
+
+.col-estado {
+    width: 12%;
+}
+
+.col-acciones {
+    width: 25%;
+}
+
+.table th,
+.table td {
+    padding-left: 12px;
+    padding-right: 12px;
+}

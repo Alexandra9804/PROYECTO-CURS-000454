@@ -15,6 +15,11 @@ export const HOME_ROUTES: Routes = [
         loadChildren: () =>
           import('../../models/router/models.router').then((m) => m.MODELS_ROUTES),
       },
+      {
+        path: 'vehicles',
+        loadChildren: () =>
+          import('../../vehicles/router/vehicles.router').then((m) => m.VEHICLES_ROUTES),
+      },
     ],
   },
 ];

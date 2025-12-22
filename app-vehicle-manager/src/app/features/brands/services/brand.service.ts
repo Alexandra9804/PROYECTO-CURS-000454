@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BrandModel } from '../model/brand.model';
 import { PageResponse } from '../../../../shared/models/page-response.model';
+import { ModelComboModel } from '../../models/model/model.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class BrandService {
   url = `${environment.API_BASE}/api/v1/marcas`;
 
   private readonly httpClient = inject(HttpClient);
-  
+
   listAll(): Observable<BrandModel[]> {
     return this.httpClient.get<BrandModel[]>(this.url);
   }
@@ -42,5 +43,9 @@ export class BrandService {
 
   delete(id?: string): Observable<BrandModel> {
     return this.httpClient.delete<BrandModel>(`${this.url}/${id}`);
+  }
+
+  findModelosByIdMarca(id?: string): Observable<ModelComboModel[]> {
+    return this.httpClient.get<ModelComboModel[]>(`${this.url}/${id}/modelos`);
   }
 }

@@ -8,3 +8,8 @@ export interface ModelModel {
   marcaId?: string;
   marcaNombre?: string;
 }
+
+export interface ModelComboModel {
+  idModelo?: string;
+  nombre?: string;
+}

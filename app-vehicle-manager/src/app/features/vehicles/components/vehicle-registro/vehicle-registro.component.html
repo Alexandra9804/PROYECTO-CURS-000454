@@ -1,0 +1,191 @@
+<h2>Registro de Vehículos</h2>
+
+<div [formGroup]="vehicleForm">
+  <div class="row">
+    <!-- VIN -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="vin" class="form-label">VIN</label>
+        <input
+          type="text"
+          id="vin"
+          class="form-control"
+          formControlName="vin"
+          maxlength="17"
+          [ngClass]="{
+            'is-invalid': fc['vin'].invalid && (fc['vin'].touched || submitted)
+          }"
+        />
+        @if (fc['vin'].hasError('required')) {
+        <div class="invalid-feedback">El VIN es requerido.</div>
+        }
+      </div>
+    </div>
+
+    <!-- PLACA -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="placa" class="form-label">Placa</label>
+        <input
+          type="text"
+          id="placa"
+          class="form-control text-uppercase"
+          formControlName="placa"
+          maxlength="6"
+        />
+      </div>
+    </div>
+
+    <!-- Año -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="anio" class="form-label">Año</label>
+        <input
+          type="number"
+          id="anio"
+          class="form-control sin-flechas"
+          formControlName="anio"
+          min="1900"
+          max="2100"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Kilometraje -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="kilometraje" class="form-label">Kilometraje</label>
+        <input
+          type="number"
+          id="kilometraje"
+          class="form-control sin-flechas"
+          formControlName="kilometraje"
+          min="0"
+        />
+      </div>
+    </div>
+
+    <!-- Color -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="color" class="form-label">Color</label>
+        <input type="text" id="color" class="form-control" formControlName="color" />
+      </div>
+    </div>
+
+    <!-- Precio -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="precio" class="form-label">Precio</label>
+        <input
+          type="number"
+          id="precio"
+          class="form-control sin-flechas"
+          formControlName="precio"
+          min="0"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="marcaId" class="form-label">Marca</label>
+        <select id="marcaId" class="form-select" formControlName="marcaId">
+          <option value="">Seleccione una marca</option>
+          @for (brand of brands; track brand.idMarca) {
+          <option [value]="brand.idMarca">{{ brand.nombre }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label for="modeloId" class="form-label">Modelo</label>
+        <select id="modeloId" class="form-select" formControlName="modeloId">
+          <option value="">Seleccione un modelo</option>
+          @for (modelo of models; track modelo.idModelo) {
+          <option [value]="modelo.idModelo">{{ modelo.nombre }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Combustible -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label class="form-label">Tipo de combustible</label>
+        <select
+          class="form-select"
+          formControlName="tipoCombustible"
+          [ngClass]="{
+            'is-invalid':
+              fc['tipoCombustible'].invalid && (fc['tipoCombustible'].touched || submitted)
+          }"
+        >
+          <option value="">Seleccione combustible</option>
+          @for (item of tipoCombustibles; track item) {
+          <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- Transmisión -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label class="form-label">Tipo de transmisión</label>
+        <select
+          class="form-select"
+          formControlName="tipoTransmision"
+          [ngClass]="{
+            'is-invalid':
+              fc['tipoTransmision'].invalid && (fc['tipoTransmision'].touched || submitted)
+          }"
+        >
+          <option value="">Seleccione transmisión</option>
+          @for (item of tipoTransmisiones; track item) {
+          <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- Estado -->
+    <div class="col-sm-4">
+      <div class="mb-3">
+        <label class="form-label">Estado del vehículo</label>
+        <select
+          class="form-select"
+          formControlName="estadoVehiculo"
+          [ngClass]="{
+            'is-invalid':
+              fc['estadoVehiculo'].invalid && (fc['estadoVehiculo'].touched || submitted)
+          }"
+        >
+          <option value="">Seleccione estado</option>
+          @for (item of estadosVehiculo; track item) {
+          <option [value]="item">{{ item }}</option>
+          }
+        </select>
+
+        @if (fc['estadoVehiculo'].hasError('required')) {
+        <div class="invalid-feedback">El estado del vehículo es requerido.</div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-sm-12">
+      <button type="button" class="btn btn-primary me-2" (click)="save()">Grabar</button>
+      <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+</div>
